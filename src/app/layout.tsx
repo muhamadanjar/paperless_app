@@ -1,11 +1,10 @@
-import "./globals.css";
+// import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-import { CacheProvider } from "@emotion/react";
-import type { EmotionCache } from "@emotion/cache";
 
 import { AuthProvider } from "@/context/AuthProvider";
+import ThemeRegistry from "@/components/ThemeRegistry";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,14 +20,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      {/* <CacheProvider value={}> */}
-
       <body className={inter.className}>
+        <ThemeRegistry>
+
         <AuthProvider>
           {children}
         </AuthProvider>
+        </ThemeRegistry>
       </body>
-      {/* </CacheProvider> */}
     </html>
   );
 }

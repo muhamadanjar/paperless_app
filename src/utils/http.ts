@@ -12,18 +12,17 @@ const http = axios.create({
 
 http.interceptors.request.use((config:any) => {
 	const token = ""; 
-	let new_config = {
-		...config.headers,
+	config.headers = {...config.headers, 
 		Authorization: `Bearer ${token}`
 	}
-	return new_config
-}, (error)=>{
+	return config;
+}, (error:any)=>{
 	return Promise.reject(error);
 });
 
 http.interceptors.response.use((response:any) => {
 	return response;
-}, (error)=>{
+}, (error:any)=>{
 	if((error.response && error.response.status == 401) || (error.response && error.response.status == 403)){
 		Router.push("/");
 	}

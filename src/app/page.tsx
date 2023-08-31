@@ -1,3 +1,5 @@
+"use client"
+import React from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -33,7 +35,7 @@ export default function Home() {
               </CardContent>
             </CardActionArea>
             <CardActions>
-              <Button size="small" color="primary">
+              <Button size="small" color="primary" >
                 Read more
               </Button>
             </CardActions>

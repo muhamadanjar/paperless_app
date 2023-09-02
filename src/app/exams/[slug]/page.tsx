@@ -77,7 +77,6 @@ export default function ExamPage({params}: Props){
 					</RadioGroup>
 				</FormControl>
 			</QuestionBoxAnswer>
-				<button onClick={handleClick}>Kembali</button>
 			<QuestionBoxNavigation>
 				<Fab size="small" color="secondary" aria-label="prev" onClick={onPrevQuestion}>
 					<NavigatePrevIcon />

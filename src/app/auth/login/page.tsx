@@ -1,206 +1,102 @@
 "use client"
-import { useState, ReactNode, MouseEvent } from "react";
-import Link from "next/link";
+import React from 'react'
+// ** React Imports
+import { ChangeEvent, ReactNode, useState } from 'react'
 
-import Box, { BoxProps } from "@mui/material/Box";
-import Typography, { TypographyProps } from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import Checkbox from "@mui/material/Checkbox";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
+import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
+import CardContent from '@mui/material/CardContent'
+import MuiCard, { CardProps } from '@mui/material/Card'
+import Box from '@mui/material/Box'
+import IconButton from '@mui/material/IconButton'
+import TextField from '@mui/material/TextField'
+import FormControl from '@mui/material/FormControl'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import InputLabel from '@mui/material/InputLabel'
+import InputAdornment from '@mui/material/InputAdornment'
+import { styled, useTheme } from '@mui/material/styles'
 
-import { styled, useTheme } from "@mui/material/styles";
+const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
+  [theme.breakpoints.up('sm')]: { width: 450 }
+}))
 
-import * as yup from "yup";
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-
-import { useAuth } from "@/hooks/useAuth";
-
-import styles from "../authentication.module.css"
-
-const BoxWrapper = styled(Box)<BoxProps>(({ theme }) => ({
-  width: "100%",
-  [theme.breakpoints.down("md")]: {
-    maxWidth: 400,
-  },
-}));
-
-const RightWrapper = styled(Box)<BoxProps>(({ theme }) => ({
-  width: "100%",
-  [theme.breakpoints.up("md")]: {
-    maxWidth: 400,
-  },
-  [theme.breakpoints.up("lg")]: {
-    maxWidth: 450,
-  },
-}));
-
-
-const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  password: yup.string().min(5).required(),
-});
-
-const defaultValues = {
-  password: "admin",
-  email: "admin@paper.com",
-};
-
-interface FormData {
-  email: string;
-  password: string;
+interface State {
+  password: string
+  showPassword: boolean
 }
 
-const LoginPage = () => {
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+export default function LoginPage() {
+  // ** State
+  const [values, setValues] = useState<State>({
+    password: '',
+    showPassword: false
+  })
+
+  // ** Hook
+  const theme = useTheme();
+
+  const handleChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
+    setValues({ ...values, [prop]: event.target.value })
+  }
+
+  const handleClickShowPassword = () => {
+    setValues({ ...values, showPassword: !values.showPassword })
+  }
+
   return (
-    <>
-      <div className="authenticationBox">
-        <Box
-          component="main"
-          sx={{
-            maxWidth: "510px",
-            ml: "auto",
-            mr: "auto",
-            padding: "50px 0 100px",
-          }}
-        >
-          <Grid item xs={12} md={12} lg={12} xl={12}>
-            <Box>
-              <Typography>
-                Sign In{" "}
-          
-              </Typography>
-
-              <Typography fontSize="15px" mb="30px">
-                Already have an account?{" "}
-                <Link
-                  href="/authentication/sign-up"
-                  className="primaryColor text-decoration-none"
-                >
-                  Sign up
-                </Link>
-              </Typography>
-
-
-              <Box component="form" noValidate onSubmit={handleSubmit}>
-                <Box
-                  sx={{
-                    background: "#fff",
-                    padding: "30px 20px",
-                    borderRadius: "10px",
-                    mb: "20px",
-                  }}
-                  className="bg-black"
-                >
-                  <Grid container alignItems="center" spacing={2}>
-                    <Grid item xs={12}>
-                      <Typography
-                        component="label"
-                        sx={{
-                          fontWeight: "500",
-                          fontSize: "14px",
-                          mb: "10px",
-                          display: "block",
-                        }}
-                      >
-                        Email
-                      </Typography>
-
-                      <TextField
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        InputProps={{
-                          style: { borderRadius: 8 },
-                        }}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                      <Typography
-                        component="label"
-                        sx={{
-                          fontWeight: "500",
-                          fontSize: "14px",
-                          mb: "10px",
-                          display: "block",
-                        }}
-                      >
-                        Password
-                      </Typography>
-
-                      <TextField
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="new-password"
-                        InputProps={{
-                          style: { borderRadius: 8 },
-                        }}
-                      />
-                    </Grid>
-                  </Grid>
-                </Box>
-
-                <Grid container alignItems="center" spacing={2}>
-                  <Grid item xs={6} sm={6}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox value="allowExtraEmails" color="primary" />
-                      }
-                      label="Remember me."
-                    />
-                  </Grid>
-
-                  <Grid item xs={6} sm={6} textAlign="end">
-                    <Link
-                      href="/authentication/forgot-password"
-                      className="primaryColor text-decoration-none"
+    <Box className='content-center'>
+      <Card sx={{ zIndex: 1 }}>
+        <CardContent sx={{ p: theme => `${theme.spacing(13, 7, 6.5)} !important` }}>
+          <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Typography variant='h6' sx={{ ml: 2, lineHeight: 1, fontWeight: 700, fontSize: '1.5rem !important' }}>
+              PaperLess
+            </Typography>
+          </Box>
+          <Box sx={{ mb: 6 }}>
+            <Typography variant='h5' sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }}>
+              {`Welcome`}
+            </Typography>
+            <Typography variant='body2'>Please sign-in to your account and start the adventure</Typography>
+          </Box>
+          <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
+            <TextField autoFocus fullWidth id='email' label='Email' sx={{ mb: 4 }} />
+            <FormControl fullWidth>
+              <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
+              <OutlinedInput
+                label='Password'
+                value={values.password}
+                id='auth-login-password'
+                onChange={handleChange('password')}
+                type={values.showPassword ? 'text' : 'password'}
+                endAdornment={
+                  <InputAdornment position='end'>
+                    <IconButton
+                      edge='end'
+                      onClick={handleClickShowPassword}
+                      onMouseDown={e => e.preventDefault()}
+                      aria-label='toggle password visibility'
                     >
-                      Forgot your password?
-                    </Link>
-                  </Grid>
-                </Grid>
+                      {/* <Icon icon={values.showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} /> */}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
 
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{
-                    mt: 2,
-                    textTransform: "capitalize",
-                    borderRadius: "8px",
-                    fontWeight: "500",
-                    fontSize: "16px",
-                    padding: "12px 10px",
-                    color: "#fff !important",
-                  }}
-                >
-                  Sign In
-                </Button>
-              </Box>
+            <Box
+              sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
+            >
+
             </Box>
-          </Grid>
-        </Box>
-      </div>
-    </>
-  );
-};
+            <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
+              Login
+            </Button>
 
-export default LoginPage;
+          </form>
+        </CardContent>
+
+      </Card>
+
+    </Box>
+  )
+}

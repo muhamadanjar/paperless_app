@@ -1,35 +1,39 @@
-import React from 'react'
+"use client";
 
-import { styled } from '@mui/material/styles'
-import Box, { BoxProps } from '@mui/material/Box'
-import { BlankLayoutProps } from './types'
+// Third-party Imports
+import classnames from "classnames";
 
-const BlankLayoutWrapper = styled(Box)<BoxProps>(({ theme }) => ({
-  height: '100vh',
+// Type Imports
+import type { ChildrenType, SystemMode } from "@/types";
 
-  '& .content-center': {
-    display: 'flex',
-    minHeight: '100vh',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: theme.spacing(5)
-  },
+// Hook Imports
+import { useSettings } from "@/hooks/useSettings";
+import useLayoutInit from "@/hooks/useLayoutInit";
 
-  '& .content-right': {
-    display: 'flex',
-    minHeight: '100vh',
-    overflowX: 'hidden',
-    position: 'relative'
-  }
-}))
+// Util Imports
+import { blankLayoutClasses } from "./utils/layoutClasses";
 
-export default function BlankLayout({ children }:BlankLayoutProps) {
+type Props = ChildrenType & {
+  systemMode: SystemMode;
+};
+
+const BlankLayout = (props: Props) => {
+  // Props
+  const { children, systemMode } = props;
+
+  // Hooks
+  const { settings } = useSettings();
+
+  useLayoutInit(systemMode);
+
   return (
-    <BlankLayoutWrapper className='layout-wrapper'>
-      <Box className='app-content' sx={{ minHeight: '100vh', overflowX: 'hidden', position: 'relative' }}>
-        {children}
-      </Box>
-    </BlankLayoutWrapper>
-	
-  )
-}
+    <div
+      className={classnames(blankLayoutClasses.root, "is-full bs-full")}
+      data-skin={settings.skin}
+    >
+      {children}
+    </div>
+  );
+};
+
+export default BlankLayout;

@@ -2,6 +2,7 @@
 import React from 'react'
 // ** React Imports
 import { ChangeEvent, ReactNode, useState } from 'react'
+import Link from 'next/link'
 
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
@@ -10,9 +11,8 @@ import MuiCard, { CardProps } from '@mui/material/Card'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import TextField from '@mui/material/TextField'
-import FormControl from '@mui/material/FormControl'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import InputLabel from '@mui/material/InputLabel'
+import Checkbox from '@mui/material/Checkbox'
+import FormControlLabel from '@mui/material/FormControlLabel'
 import InputAdornment from '@mui/material/InputAdornment'
 import { styled, useTheme } from '@mui/material/styles'
 
@@ -32,6 +32,8 @@ export default function LoginPage() {
     showPassword: false
   })
 
+  const [isPasswordShown, setIsPasswordShown] = useState(false)
+
   // ** Hook
   const theme = useTheme();
 
@@ -44,9 +46,9 @@ export default function LoginPage() {
   }
 
   return (
-    <Box className='content-center'>
-      <Card sx={{ zIndex: 1 }}>
-        <CardContent sx={{ p: theme => `${theme.spacing(13, 7, 6.5)} !important` }}>
+    <Box className='flex justify-center items-center min-bs-[100dvh] is-full relative p-6'>
+      <Card className='flex flex-col sm:is-[460px]'>
+        <CardContent className='p-6 sm:!p-12'>
           <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Typography variant='h6' sx={{ ml: 2, lineHeight: 1, fontWeight: 700, fontSize: '1.5rem !important' }}>
               PaperLess
@@ -58,38 +60,43 @@ export default function LoginPage() {
             </Typography>
             <Typography variant='body2'>Please sign-in to your account and start the adventure</Typography>
           </Box>
-          <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
+          <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()} className='flex flex-col gap-5'>
             <TextField autoFocus fullWidth id='email' label='Email' sx={{ mb: 4 }} />
-            <FormControl fullWidth>
-              <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
-              <OutlinedInput
+           
+            <TextField
+                fullWidth
                 label='Password'
-                value={values.password}
-                id='auth-login-password'
-                onChange={handleChange('password')}
-                type={values.showPassword ? 'text' : 'password'}
-                endAdornment={
-                  <InputAdornment position='end'>
-                    <IconButton
-                      edge='end'
-                      onClick={handleClickShowPassword}
-                      onMouseDown={e => e.preventDefault()}
-                      aria-label='toggle password visibility'
-                    >
-                      {/* <Icon icon={values.showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} /> */}
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
+                id='outlined-adornment-password'
+                type={isPasswordShown ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <IconButton
+                        size='small'
+                        edge='end'
+                        onClick={handleClickShowPassword}
+                        onMouseDown={e => e.preventDefault()}
+                      >
+                        <i className={isPasswordShown ? 'ri-eye-off-line' : 'ri-eye-line'} />
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+            />
+            <div className='flex justify-between items-center gap-x-3 gap-y-1 flex-wrap'>
+                <FormControlLabel control={<Checkbox />} label='Remember me' />
+                <Typography
+                  className='text-end'
+                  color='primary'
+                  component={Link}
+                  href={'/pages/auth/forgot-password-v1'}
+                >
+                  Forgot password?
+                </Typography>
+            </div>
 
-            <Box
-              sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
-            >
-
-            </Box>
-            <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
-              Login
+            <Button fullWidth variant='contained' type='submit'>
+                Log In
             </Button>
 
           </form>

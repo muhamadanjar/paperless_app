@@ -14,11 +14,13 @@
   --customizer-z-index: var(--mui-zIndex-drawer);
   --search-z-index: var(--mui-zIndex-tooltip);
   --drawer-z-index: var(--mui-zIndex-drawer);
-  --backdrop-color: rgb(var(--mui-mainColorChannels-light) / 0.5);
+  --backdrop-color: rgba(0, 0, 0, 0.5);
+  --mui-mainColorChannels-shadow: var(--mui-mainColorChannels-lightShadow);
 }
 
 [data-mui-color-scheme='dark'] {
   --backdrop-color: rgb(16 17 33 / 0.6);
+  --mui-mainColorChannels-shadow: var(--mui-mainColorChannels-darkShadow);
 }
 
 *,
@@ -48,7 +50,7 @@ ul:not([class]) {
   padding-inline-start: 40px;
 }
 
-/*! Do note remove following style */
+/*! Do not remove the following styles */
 /*
   Fix the popout / submenu closing issue when using hover trigger to open the menu and using
   perfectscrollbar where the bridge create with safe polygon by floating ui was not working
@@ -121,6 +123,11 @@ ul:not([class]) {
 
 :where([class^='ri-']) {
   font-size: 1.5rem;
+}
+
+/* Fix width issue for the input-otp component */
+input[autocomplete='one-time-code'][data-input-otp='true'] {
+  inline-size: 100% !important;
 }
 
 code {

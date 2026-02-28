@@ -1,28 +1,26 @@
-import type { NextAuthOptions } from 'next-auth'
-import type { Adapter } from 'next-auth/adapters'
-import { PrismaAdapter } from '@auth/prisma-adapter'
-import { PrismaClient } from '@prisma/client'
-import CredentialProvider from 'next-auth/providers/credentials'
+import NextAuth from 'next-auth'
+import { DrizzleAdapter } from '@auth/drizzle-adapter'
+import Credentials from 'next-auth/providers/credentials'
+import { db } from '@/utils/db'
 
-const prisma = new PrismaClient()
-
-export const authOptions: NextAuthOptions = {
-	adapter: PrismaAdapter(prisma) as Adapter,
+export const { handlers, signIn, signOut, auth } = NextAuth({
+	adapter: DrizzleAdapter(db),
 	providers: [
-		CredentialProvider({
-			name: "Crendential",
+		Credentials({
+			name: 'Credentials',
 			credentials: {
-				username: { label: "Username", type: "text" },
-				password: { label: "Password", type: "password" },
+				email: { label: 'Email', type: 'email' },
+				password: { label: 'Password', type: 'password' },
 			},
-			async authorize(credentials: any, req) {
+			async authorize(credentials) {
 				const { email, password } = credentials as { email: string; password: string }
+
 				const res = await fetch(`${process.env.API_URL}/login`, {
 					method: 'POST',
 					headers: {
-						'Content-Type': 'application/json'
+						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify({ email, password })
+					body: JSON.stringify({ email, password }),
 				})
 
 				const data = await res.json()
@@ -45,7 +43,7 @@ export const authOptions: NextAuthOptions = {
 		}),
 	],
 	session: {
-		strategy: "jwt", 
-		maxAge: 30 * 24 * 60 * 60 // ** 30 days 
+		strategy: 'jwt',
+		maxAge: 30 * 24 * 60 * 60, // ** 30 days
 	},
-}
+})

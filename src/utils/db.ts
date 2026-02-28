@@ -1,20 +1,16 @@
+import { drizzle } from 'drizzle-orm/postgres-js'
+import postgres from 'postgres'
+import * as schema from '@/db/schema'
 
-import { PrismaClient } from '@prisma/client'
+/**
+ * Drizzle ORM database connection
+ *
+ * Pastikan DATABASE_URL sudah diset di .env:
+ * DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
+ */
+const connectionString = process.env.DATABASE_URL!
 
-const prisma = new PrismaClient()
+// Disable prefetch karena tidak didukung untuk transaction mode
+const client = postgres(connectionString, { prepare: false })
 
-
-async function main() {
-	// ... you will write your Prisma Client queries here
-}
-
-main()
-	.then(async () => {
-		await prisma.$disconnect()
-	})
-	.catch(async (e) => {
-		console.error(e)
-		await prisma.$disconnect()
-		process.exit(1)
-	})
-
+export const db = drizzle(client, { schema })

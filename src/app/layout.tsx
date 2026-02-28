@@ -1,35 +1,37 @@
-import { headers } from 'next/headers';
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "@/assets/css/globals.css";
-import classnames from "classnames";
+import { headers } from 'next/headers'
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
+import classnames from 'classnames'
 
-import 'react-perfect-scrollbar/dist/css/styles.css';
+import '@/assets/css/globals.css'
+import 'react-perfect-scrollbar/dist/css/styles.css'
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "Paperless Exam",
-  description: "Paperless App",
-};
+  title: 'Paperless Exam',
+  description: 'Paperless App',
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
-  const headersList = headers()
-
   return (
     <html lang="en">
       <body
         className={classnames(
-          "flex is-full min-bs-full flex-auto flex-col",
+          'flex is-full min-bs-full flex-auto flex-col',
           inter.className
         )}
       >
-        {children}
+        {/* AppRouterCacheProvider diperlukan untuk MUI v7 dengan Next.js App Router */}
+        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+          {children}
+        </AppRouterCacheProvider>
       </body>
     </html>
-  );
+  )
 }

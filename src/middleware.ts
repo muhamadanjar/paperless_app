@@ -1,51 +1,37 @@
 import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { auth } from '@/libs/auth'
 
-import { NextRequestWithAuth, withAuth } from 'next-auth/middleware'
 const HOME_PAGE_URL = '/dashboards'
-export default withAuth(
-	async function middleware(request: NextRequestWithAuth) {
 
-		const pathname = request.nextUrl.pathname;
-		const token = request.nextauth.token
-		const guestRoutes = ['auth/login', 'forgot-password']
-		const isUserLoggedIn = !!token
-		const sharedRoutes = ['shared-route']
-		const privateRoute = ![...guestRoutes, ...sharedRoutes].some(route => pathname.endsWith(route))
+export default auth(function middleware(request) {
+	const pathname = request.nextUrl.pathname
+	const token = request.auth
+	const guestRoutes = ['auth/login', 'forgot-password']
+	const isUserLoggedIn = !!token
+	const sharedRoutes = ['shared-route']
+	const privateRoute = ![...guestRoutes, ...sharedRoutes].some(route => pathname.endsWith(route))
+
+	if (!isUserLoggedIn && privateRoute) {
 		let redirectUrl = '/auth/login'
 
-		if (!isUserLoggedIn && privateRoute) {
-			let redirectUrl = '/login'
-
-			if (!(pathname === '/')) {
-				const searchParamsStr = new URLSearchParams({ redirectTo: pathname }).toString()
-
-				redirectUrl += `?${searchParamsStr}`
-			}
-			console.log("dfd")
-
-			return NextResponse.redirect(redirectUrl, request)
+		if (!(pathname === '/')) {
+			const searchParamsStr = new URLSearchParams({ redirectTo: pathname }).toString()
+			redirectUrl += `?${searchParamsStr}`
 		}
 
-		const isRequestedRouteIsGuestRoute = guestRoutes.some(route => pathname.endsWith(route))
-
-		if (isUserLoggedIn && isRequestedRouteIsGuestRoute) {
-			return NextResponse.redirect(redirectUrl, request)
-		}
-
-		if (pathname === '/') {
-			return NextResponse.redirect(HOME_PAGE_URL, request)
-		}
-
-	},
-	{
-		callbacks: {
-			authorized: () => {
-				return true
-			}
-		}
+		return NextResponse.redirect(new URL(redirectUrl, request.url))
 	}
-)
+
+	const isRequestedRouteIsGuestRoute = guestRoutes.some(route => pathname.endsWith(route))
+
+	if (isUserLoggedIn && isRequestedRouteIsGuestRoute) {
+		return NextResponse.redirect(new URL(HOME_PAGE_URL, request.url))
+	}
+
+	if (pathname === '/') {
+		return NextResponse.redirect(new URL(HOME_PAGE_URL, request.url))
+	}
+})
 
 // See "Matching Paths" below to learn more
 export const config = {

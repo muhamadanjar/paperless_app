@@ -17,7 +17,7 @@ import themeConfig from "@/configs/themeConfig";
 
 // Hook Imports
 import { useObjectCookie } from "@/hooks/useObjectCookie";
-import primaryColorConfig from "@/configs/primaryColorConfig";
+import primaryColorConfig from "@/configs/primary-color-config";
 
 // Settings type
 export type Settings = {

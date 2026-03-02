@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from "react";
 import {Container, Box, Typography, FormControl, Grid, FormControlLabel, FormLabel, Radio, RadioGroup, Fab, styled, Stack, Autocomplete, TextField} from "@mui/material"
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/navbar";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigatePrevIcon from "@mui/icons-material/NavigateBefore";
 type Props =  {
@@ -86,13 +86,13 @@ export default function ExamPage({params}: Props){
 		<QuestionBoxNavigation>
 			<Grid container className="px-5">
 
-			<Grid item md={4}>
+			<Grid size={{md: 4}}>
 
 				<Fab size="small" color="secondary" aria-label="prev" onClick={onPrevQuestion}>
 					<NavigatePrevIcon />
 				</Fab>
 			</Grid>
-			<Grid item md={4} className="flex justify-center">
+			<Grid size={{md: 4}} className="flex justify-center">
 
 			<Autocomplete
 				disablePortal
@@ -102,7 +102,7 @@ export default function ExamPage({params}: Props){
 				renderInput={(params) => <TextField {...params} label="Question" />}
 			/>
 			</Grid>
-			<Grid item md={4} className="flex items-center justify-end">
+			<Grid  size={{md: 4}} className="flex items-center justify-end">
 			<Fab size="small" color="secondary" aria-label="next" onClick={onNextQuestion}>
 				<NavigateNextIcon />
 			</Fab>

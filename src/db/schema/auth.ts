@@ -9,11 +9,11 @@ import {
 import type { AdapterAccountType } from 'next-auth/adapters'
 
 // ─── Users ────────────────────────────────────────────────────────────────────
-export const users = pgTable('user', {
+export const users = pgTable('users', {
 	id: text('id')
 		.primaryKey()
 		.$defaultFn(() => crypto.randomUUID()),
-	name: text('name'),
+	name: text('name').notNull(),
 	email: text('email').unique(),
 	emailVerified: timestamp('emailVerified', { mode: 'date' }),
 	image: text('image'),

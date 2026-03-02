@@ -1,8 +1,9 @@
 import axios from "axios";
 import Router from "next/router";
+import { getEnv } from "@/libs/get-env";
 
 const http = axios.create({
-	baseURL: process.env.API_URL,
+	baseURL: getEnv("API_URL"),
 	timeout: 30000,
 	headers:{
 		Accept: "application/json",

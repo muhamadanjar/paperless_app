@@ -2,6 +2,7 @@ import NextAuth from 'next-auth'
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import Credentials from 'next-auth/providers/credentials'
 import { db } from '@/utils/db'
+import { getEnv } from './get-env'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	adapter: DrizzleAdapter(db),
@@ -15,7 +16,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			async authorize(credentials) {
 				const { email, password } = credentials as { email: string; password: string }
 
-				const res = await fetch(`${process.env.API_URL}/login`, {
+				const res = await fetch(`${getEnv('API_URL')}/login`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',

@@ -1,13 +1,13 @@
 
 import { AuthProvider } from "@/context/auth-provider";
-import ThemeRegistry from "@/components/theme-registry";
 import { ReactNode } from "react";
+import { LayoutWrapper } from "@/components/layout/layout-wrapper";
 export default function AdminLayout({ children }: {children:ReactNode}){
 	return (
 		<>
-        <ThemeRegistry>
+        <LayoutWrapper>
           <AuthProvider>{children}</AuthProvider>
-        </ThemeRegistry>
+        </LayoutWrapper>
 		</>
 	)
 }

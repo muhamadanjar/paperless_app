@@ -1,9 +1,9 @@
-import { useLayoutStore } from "@/stores/layoutStore";
+import { useLayoutStore } from "@/stores/layout-store";
 import { TemplateKey } from "@/types/layout";
 import { ThemeProvider } from "@emotion/react";
 import { Box, Paper, Stack, Typography, IconButton, alpha } from "@mui/material";
 import { useState } from "react";
-import { buildTheme } from "@/components/theme-registry/theme";
+import { buildTheme } from "@/components/ui/theme-registry/theme";
 import CloseIcon from "@mui/icons-material/Close";
 import TuneIcon from "@mui/icons-material/Tune";
 

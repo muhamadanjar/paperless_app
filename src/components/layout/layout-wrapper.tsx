@@ -1,12 +1,12 @@
 "use client";
 
 import { ReactNode } from "react";
-import { useLayoutStore } from "@/stores/layoutStore";
-import { buildTheme } from "../theme-registry/theme";
+import { useLayoutStore } from "@/stores/layout-store";
+import { buildTheme } from "../ui/theme-registry/theme";
 import { LAYOUT_REGISTRY } from "./registry";
 import { LAYOUT_CONFIG } from "@/configs/layout.config";
-import ThemeRegistry from "../theme-registry";
-import { TemplateSwitcher } from "../template-switcher";
+import ThemeRegistry from "../ui/theme-registry";
+import { TemplateSwitcher } from "../ui/template-switcher";
 
 export const LayoutWrapper = ({ children }: { children: ReactNode }) => {
   const activeTemplate = useLayoutStore((s) => s.activeTemplate);

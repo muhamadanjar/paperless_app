@@ -1,4 +1,4 @@
-import { useLayoutStore, selectActiveNav } from "@/stores/layoutStore";
+import { useLayoutStore, selectActiveNav } from "@/stores/layout-store";
 import { List, Tooltip, ListItemButton, ListItemIcon, ListItemText, Box } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 

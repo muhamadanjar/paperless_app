@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from "react";
 import {Container, Box, Typography, FormControl, Grid, FormControlLabel, FormLabel, Radio, RadioGroup, Fab, styled, Stack, Autocomplete, TextField} from "@mui/material"
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navigation/navbar";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigatePrevIcon from "@mui/icons-material/NavigateBefore";
 type Props =  {

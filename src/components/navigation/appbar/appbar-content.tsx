@@ -1,5 +1,5 @@
 import { LAYOUT_CONFIG } from "@/configs/layout.config";
-import { useLayoutStore, selectPageTitle, selectNotifications, selectDarkMode } from "@/stores/layoutStore";
+import { useLayoutStore, selectPageTitle, selectNotifications, selectDarkMode } from "@/stores/layout-store";
 import { Box, IconButton, Typography, Tooltip, Badge, Divider, Stack, Avatar } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import LightModeIcon from "@mui/icons-material/LightMode";

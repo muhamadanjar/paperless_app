@@ -1,7 +1,7 @@
 "use client";
 
 import { TemplateProps } from "@/types/layout";
-import { useLayoutStore, selectActiveNav, selectNotifications, selectDarkMode } from "@/stores/layoutStore";
+import { useLayoutStore, selectActiveNav, selectNotifications, selectDarkMode } from "@/stores/layout-store";
 import { Box, AppBar, Toolbar, Stack, Typography, Tooltip, IconButton, Badge, Avatar, Chip } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { LAYOUT_CONFIG } from "@/configs/layout.config";

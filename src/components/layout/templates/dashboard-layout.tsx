@@ -1,13 +1,13 @@
 "use client";
 
 import { TemplateProps } from "@/types/layout";
-import { useLayoutStore, selectSidebarCollapsed, selectMobileOpen } from "@/stores/layoutStore";
+import { useLayoutStore, selectSidebarCollapsed, selectMobileOpen } from "@/stores/layout-store";
 import { useMediaQuery, Box, Drawer, AppBar } from "@mui/material";
 import { LAYOUT_CONFIG } from "@/configs/layout.config";
-import { SidebarLogo } from "@/components/sidebar-logo";
-import { SidebarNav } from "@/components/sidebar-nav";
-import { SidebarFooter } from "@/components/sidebar-footer";
-import { AppBarContent } from "@/components/appbar-content";
+import { SidebarLogo } from "@/components/navigation/sidebar/sidebar-logo";
+import { SidebarNav } from "@/components/navigation/sidebar/sidebar-nav";
+import { SidebarFooter } from "@/components/navigation/sidebar/sidebar-footer";
+import { AppBarContent } from "@/components/navigation/appbar/appbar-content";
 
 export const DashboardTemplate: React.FC<TemplateProps> = ({ children, theme }) => {
   const sidebarCollapsed = useLayoutStore(selectSidebarCollapsed);

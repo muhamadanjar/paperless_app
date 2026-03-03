@@ -1,4 +1,4 @@
-import { useLayoutStore } from "@/stores/layoutStore";
+import { useLayoutStore } from "@/stores/layout-store";
 import { Box, List, Tooltip, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";

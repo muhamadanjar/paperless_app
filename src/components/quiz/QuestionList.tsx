@@ -13,8 +13,9 @@ import AddIcon from "@mui/icons-material/Add";
 interface Question {
   id: string;
   question: string;
-  options: { id?: string; label: string }[];
-  answer: string;
+  type?: "multiple_choice" | "essay";
+  options?: { id?: string; label: string }[];
+  answer?: string;
 }
 
 interface QuestionListProps {
@@ -75,10 +76,14 @@ export function QuestionList({ questions, onAddQuestion, onEditQuestion, onDelet
       </Box>
 
       <div className="space-y-3">
-        {questions.map((q, index) => (
-          <Accordion 
-            key={q.id} 
-            expanded={expanded === q.id} 
+        {questions.map((q, index) => {
+          const type: "multiple_choice" | "essay" =
+            q.type ?? (q.options && q.options.length > 0 ? "multiple_choice" : "essay");
+
+          return (
+          <Accordion
+            key={q.id}
+            expanded={expanded === q.id}
             onChange={handleChange(q.id)}
             className="rounded-xl before:hidden border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden bg-white dark:bg-slate-900"
             disableGutters
@@ -88,8 +93,8 @@ export function QuestionList({ questions, onAddQuestion, onEditQuestion, onDelet
               className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
             >
               <Box className="flex items-center w-full pr-4">
-                <Box className="flex-grow flex items-center gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 flex items-center justify-center text-sm font-bold">
+                <Box className="grow flex items-center gap-4">
+                  <div className="shrink-0 w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 flex items-center justify-center text-sm font-bold">
                     {index + 1}
                   </div>
                   <Typography className="font-medium text-slate-800 dark:text-slate-200 truncate pr-4">
@@ -123,34 +128,42 @@ export function QuestionList({ questions, onAddQuestion, onEditQuestion, onDelet
             </AccordionSummary>
             
             <AccordionDetails className="bg-slate-50 dark:bg-slate-800/30 border-t border-slate-100 dark:border-slate-800 p-6">
-              <div className="space-y-3">
-                {q.options.map((opt, i) => {
-                  const optValue = opt.id || i.toString();
-                  const isCorrect = q.answer === optValue;
-                  
-                  return (
-                    <div 
-                      key={optValue} 
-                      className={`
+              {type === "essay" ? (
+                <div className="space-y-2">
+                  <Typography className="text-sm text-slate-600 dark:text-slate-300">
+                    Essay question. Jawaban peserta akan dinilai manual, tidak ada opsi pilihan ganda.
+                  </Typography>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {q.options?.map((opt, i) => {
+                    const optValue = opt.id || i.toString();
+                    const isCorrect = q.answer === optValue;
+                    
+                    return (
+                      <div 
+                        key={optValue} 
+                        className={`
                         p-3 rounded-lg border flex items-center justify-between
                         ${isCorrect 
                           ? 'border-green-200 bg-green-50 dark:border-green-900/50 dark:bg-green-900/20' 
                           : 'border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800'}
                       `}
-                    >
-                      <Typography className={`text-sm ${isCorrect ? 'font-medium text-green-800 dark:text-green-300' : 'text-slate-600 dark:text-slate-300'}`}>
-                        {String.fromCharCode(65 + i)}. {opt.label}
-                      </Typography>
-                      {isCorrect && (
-                        <Chip label="Correct Answer" size="small" color="success" className="h-6 text-xs" />
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+                      >
+                        <Typography className={`text-sm ${isCorrect ? 'font-medium text-green-800 dark:text-green-300' : 'text-slate-600 dark:text-slate-300'}`}>
+                          {String.fromCharCode(65 + i)}. {opt.label}
+                        </Typography>
+                        {isCorrect && (
+                          <Chip label="Correct Answer" size="small" color="success" className="h-6 text-xs" />
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </AccordionDetails>
           </Accordion>
-        ))}
+        );})}
       </div>
     </Box>
   );

@@ -41,7 +41,6 @@ export type LayoutStore = LayoutState & LayoutActions;
 
 export interface TemplateProps {
   children: React.ReactNode;
-  theme: import('@mui/material/styles').Theme;
 }
 
 export type TemplateComponent = React.FC<TemplateProps>;

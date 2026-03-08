@@ -12,8 +12,8 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  { label: 'Overview', icon: <DashboardIcon fontSize="small" /> , href: '/'},
-  { label: 'Quiz', icon: <BarChartIcon fontSize="small" /> , href: '/quiz' },
-  { label: 'Leaderboard', icon: <GroupIcon fontSize="small" /> , href: '/leaderboard' },
-  { label: 'Settings', icon: <SettingsIcon fontSize="small" /> , href: '/settings' },
+  { label: "Overview", icon: <DashboardIcon fontSize="small" />, href: "/overview" },
+  { label: "Quiz", icon: <BarChartIcon fontSize="small" />, href: "/quiz" },
+  { label: "Leaderboard", icon: <GroupIcon fontSize="small" />, href: "/leaderboard" },
+  { label: "Settings", icon: <SettingsIcon fontSize="small" />, href: "/settings" },
 ];

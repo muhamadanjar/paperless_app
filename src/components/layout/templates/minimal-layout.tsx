@@ -2,12 +2,13 @@
 
 import { TemplateProps } from "@/types/layout";
 import { useLayoutStore, selectNotifications, selectDarkMode, selectActiveNav } from "@/stores/layout-store";
-import { Box, AppBar, Toolbar, Stack, Typography, Tooltip, IconButton, Badge, Avatar } from "@mui/material";
+import { Box, AppBar, Toolbar, Stack, Typography, Tooltip, IconButton, Badge, Avatar, useTheme } from "@mui/material";
 import { LAYOUT_CONFIG } from "@/configs/layout.config";
 import { NAV_ITEMS } from "@/configs/nav.config";
 import { LightMode as LightModeIcon, DarkMode as DarkModeIcon, Notifications as NotificationsIcon } from "@mui/icons-material";
 
-export const MinimalTemplate: React.FC<TemplateProps> = ({ children, theme }) => {
+export const MinimalTemplate: React.FC<TemplateProps> = ({ children }) => {
+  const theme = useTheme();
   const activeNav = useLayoutStore(selectActiveNav);
   const setNav = useLayoutStore((s) => s.setNav);
   const notifications = useLayoutStore(selectNotifications);

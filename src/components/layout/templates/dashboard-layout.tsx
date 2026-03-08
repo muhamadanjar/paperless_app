@@ -2,14 +2,15 @@
 
 import { TemplateProps } from "@/types/layout";
 import { useLayoutStore, selectSidebarCollapsed, selectMobileOpen } from "@/stores/layout-store";
-import { useMediaQuery, Box, Drawer, AppBar } from "@mui/material";
+import { useMediaQuery, Box, Drawer, AppBar, useTheme } from "@mui/material";
 import { LAYOUT_CONFIG } from "@/configs/layout.config";
 import { SidebarLogo } from "@/components/navigation/sidebar/sidebar-logo";
 import { SidebarNav } from "@/components/navigation/sidebar/sidebar-nav";
 import { SidebarFooter } from "@/components/navigation/sidebar/sidebar-footer";
 import { AppBarContent } from "@/components/navigation/appbar/appbar-content";
 
-export const DashboardTemplate: React.FC<TemplateProps> = ({ children, theme }) => {
+export const DashboardTemplate: React.FC<TemplateProps> = ({ children }) => {
+  const theme = useTheme();
   const sidebarCollapsed = useLayoutStore(selectSidebarCollapsed);
   const mobileOpen = useLayoutStore(selectMobileOpen);
   const toggleMobile = useLayoutStore((s) => s.toggleMobile);

@@ -9,6 +9,10 @@
   /* Radial & conic gradient utilities (pengganti tailwind.config.ts) */
   --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
   --background-image-gradient-conic: conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops));
+
+  /* Bridge ke MUI theme: gunakan warna utama & background MUI sebagai token Tailwind */
+  --color-primary: var(--primary-color);
+  --color-surface: var(--background-color);
 }
 
 /* ─── CSS Layer Order (Tailwind v4 best practice) ────────────── */

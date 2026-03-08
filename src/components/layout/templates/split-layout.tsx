@@ -2,13 +2,14 @@
 
 import { TemplateProps } from "@/types/layout";
 import { useLayoutStore, selectActiveNav, selectNotifications, selectDarkMode } from "@/stores/layout-store";
-import { Box, AppBar, Toolbar, Stack, Typography, Tooltip, IconButton, Badge, Avatar, Chip } from "@mui/material";
+import { Box, AppBar, Toolbar, Stack, Typography, Tooltip, IconButton, Badge, Avatar, Chip, useTheme } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { LAYOUT_CONFIG } from "@/configs/layout.config";
 import { NAV_ITEMS } from "@/configs/nav.config";
 import { LightMode as LightModeIcon, DarkMode as DarkModeIcon, Notifications as NotificationsIcon } from "@mui/icons-material";
 
-export const SplitPanelTemplate: React.FC<TemplateProps> = ({ children, theme }) => {
+export const SplitPanelTemplate: React.FC<TemplateProps> = ({ children }) => {
+  const theme = useTheme();
   const activeNav = useLayoutStore(selectActiveNav);
   const setNav = useLayoutStore((s) => s.setNav);
   const pageTitle = useLayoutStore((s) => s.pageTitle);

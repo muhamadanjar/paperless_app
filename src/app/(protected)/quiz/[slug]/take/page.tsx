@@ -1,9 +1,9 @@
 "use client";
 
-import { Box, Container } from "@mui/material";
 import { QuizTake } from "@/components/quiz/QuizTake";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { Alert, Typography } from "@mui/material";
 
 // Mock Data
 const MOCK_QUIZ = {
@@ -34,8 +34,14 @@ const MOCK_QUESTIONS = [
       { id: "2", label: "To cache API responses" },
       { id: "3", label: "To create memoized callback functions" }
     ],
-    answer: "1"
-  }
+    answer: "1",
+  },
+  {
+    id: "q3",
+    question:
+      "In your own words, explain the difference between useMemo and useCallback, dan kapan sebaiknya masing-masing digunakan.",
+    type: "essay",
+  },
 ];
 
 export default function TakeQuizPage() {
@@ -43,7 +49,7 @@ export default function TakeQuizPage() {
 
   const handleQuizSubmit = (answers: Record<string, string>) => {
     console.log("Submitted answers:", answers);
-    toast.success("Quiz submitted successfully!");
+    toast.info("Preview submitted (jawaban tidak benar-benar disimpan).");
     
     // Calculate score (mocking backend behavior)
     let correctCount = 0;
@@ -60,12 +66,23 @@ export default function TakeQuizPage() {
   };
 
   return (
-    <div className="bg-slate-50/50 dark:bg-slate-900 min-h-screen py-12 px-4">
-      <QuizTake 
-        quiz={MOCK_QUIZ}
-        questions={MOCK_QUESTIONS}
-        onSubmit={handleQuizSubmit}
-      />
+    <div className="min-h-screen bg-linear-to-br from-sky-50 via-white to-sky-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 py-12 px-4">
+      <div className="max-w-5xl mx-auto">
+        <div className="mb-4">
+          <Alert severity="info" variant="outlined">
+            <Typography variant="body2">
+              Ini adalah <strong>preview</strong> quiz untuk pembuat / admin. Gunakan halaman{" "}
+              <code>/exams/{MOCK_QUIZ.slug}</code> sebagai link yang dibagikan ke peserta untuk
+              benar-benar mengerjakan quiz.
+            </Typography>
+          </Alert>
+        </div>
+        <QuizTake
+          quiz={MOCK_QUIZ}
+          questions={MOCK_QUESTIONS}
+          onSubmit={handleQuizSubmit}
+        />
+      </div>
     </div>
   );
 }

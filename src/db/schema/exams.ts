@@ -6,9 +6,10 @@ export const quiz = pgTable('quiz', {
         .primaryKey()
         .$defaultFn(() => crypto.randomUUID()),
     name: text('name'),
+    slug: text('slug').notNull().unique(),
     description: text('description'),
     image: text('image'),
-
+    ownerId: text('ownerId').notNull().references(() => users.id),
     createdAt: timestamp('createdAt', { mode: 'date' }).defaultNow(),
     updatedAt: timestamp('updatedAt', { mode: 'date' }).defaultNow(),
 })

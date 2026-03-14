@@ -14,7 +14,7 @@ export const authConfig = {
             console.log("headers",headers);
             const isLoggedIn = !!auth?.user;
 
-            if (nextUrl.pathname === Routes.login.path) {
+            if (nextUrl.pathname.startsWith('/auth')) {
                 if (isLoggedIn){ 
                     return NextResponse.redirect(new URL(Routes.dashboards.path, nextUrl), {
                         status: 307,

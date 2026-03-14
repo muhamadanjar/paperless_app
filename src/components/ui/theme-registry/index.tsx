@@ -3,7 +3,7 @@ import * as React from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useLayoutStore } from '@/stores/layout-store';
-import { buildTheme } from './theme';
+import { buildTheme } from '@/libs/theme';
 export default function ThemeRegistry({ children }: { children: React.ReactNode }) {
 	const darkMode = useLayoutStore((s) => s.darkMode);
 

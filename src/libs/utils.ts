@@ -2,6 +2,7 @@ import clsx, { ClassValue } from "clsx";
 import dayjs from "dayjs";
 import { twMerge } from "tailwind-merge";
 
+
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
 }
@@ -40,4 +41,39 @@ export function formatNumber(value: number): string {
 		return value.toString();
 	}
 }
+
+export function lookupTable<R, I, K extends string | number>(items: I[], options: {
+    key: (item: I) => K;
+    value: (item: I) => R;
+    onDuplicate?: (key: K, value: R, item: I) => R;
+}) {
+    return items.reduce((acc, item) => {
+        const key = options.key(item);
+        if (acc[key]) {
+            if (options.onDuplicate) {
+                acc[key] = options.onDuplicate(key, acc[key],  item);
+            }
+            return acc
+        }
+        
+        acc[key] = options.value(item);
+        return acc;
+    }, {} as Record<K, R>);
+}
+
+export function lookupTableArray<I, R, K extends string | number>(items: I[], options: {
+    key: (item: I) => K;
+    value: (item: I) => R;
+}) {
+    return items.reduce((acc, item) => {
+        const key = options.key(item);
+        const value = options.value(item);
+        if (!acc[key]) {
+            acc[key] = [];
+        }
+        acc[key].push(value);
+        return acc;
+    }, {} as Record<K, R[]>);
+}
+
 

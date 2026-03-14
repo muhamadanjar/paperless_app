@@ -16,5 +16,5 @@ class Route<Param extends Record<string, string | number>> {
 
 export class Routes {
     static login = new Route('/auth/login');
-    static dashboards = new Route('/dashboards');
+    static dashboards = new Route('/overview');
 }

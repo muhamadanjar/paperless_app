@@ -10,9 +10,9 @@ export const SidebarLogo: React.FC<SidebarLogoProps> = ({ collapsed }) => (
     sx={{
       display: 'flex',
       alignItems: 'center',
-      gap: collapsed ? 0 : 1.5,
+      gap: collapsed ? 0 : 1.25,
       justifyContent: collapsed ? 'center' : 'flex-start',
-      px: collapsed ? 0 : 2.5,
+      px: collapsed ? 0 : 2,
       height: LAYOUT_CONFIG.appBarHeight,
       borderBottom: 1,
       borderColor: 'divider',
@@ -21,17 +21,17 @@ export const SidebarLogo: React.FC<SidebarLogoProps> = ({ collapsed }) => (
   >
     <Box
       sx={{
-        width: 32, height: 32, borderRadius: '10px',
+        width: 28, height: 28, borderRadius: '8px',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontWeight: 900, fontSize: 14,
+        fontWeight: 800, fontSize: 13,
         bgcolor: 'primary.main', color: 'primary.contrastText', flexShrink: 0,
       }}
     >
       N
     </Box>
     {!collapsed && (
-      <Typography variant="h6" noWrap sx={{ fontSize: '1.1rem' }}>
-        Nexus
+      <Typography variant="subtitle2" noWrap sx={{ fontSize: '0.95rem', fontWeight: 700, letterSpacing: '0.02em' }}>
+        NEXUS
       </Typography>
     )}
   </Box>

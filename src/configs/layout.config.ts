@@ -16,9 +16,9 @@ export interface LayoutConfig {
  * in layout.types.ts, then register the component in layout.registry.ts.
  */
 export const LAYOUT_CONFIG: LayoutConfig = {
-  defaultTemplate: 'splitpanel',   // ← change this to switch default template
-  sidebarWidth: 256,
-  sidebarCollapsedWidth: 68,
-  appBarHeight: 64,
-  persistKey: 'nexus-layout-v1',  // localStorage key for zustand persist
+  defaultTemplate: 'dashboard',   // switched default template to dashboard for a classic compact feel
+  sidebarWidth: 220,
+  sidebarCollapsedWidth: 60,
+  appBarHeight: 56,
+  persistKey: 'nexus-layout-v1',
 };

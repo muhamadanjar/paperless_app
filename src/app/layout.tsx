@@ -1,11 +1,12 @@
 import { headers } from 'next/headers'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
 import classnames from 'classnames'
 
 import '@/assets/css/globals.css'
 import 'react-perfect-scrollbar/dist/css/styles.css'
+import { AuthProvider } from '@/context/auth-provider'
+import ProviderWrapper from '@/providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -28,9 +29,11 @@ export default async function RootLayout({
         )}
       >
         {/* AppRouterCacheProvider diperlukan untuk MUI v7 dengan Next.js App Router */}
-        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-          {children}
-        </AppRouterCacheProvider>
+        <ProviderWrapper>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </ProviderWrapper>
       </body>
     </html>
   )

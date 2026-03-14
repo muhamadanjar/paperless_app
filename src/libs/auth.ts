@@ -1,11 +1,12 @@
-import NextAuth from 'next-auth'
+import NextAuth, { User } from 'next-auth'
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import Credentials from 'next-auth/providers/credentials'
 import { db } from '@/utils/db'
 import { getEnv } from './get-env'
+import { authConfig } from '@/configs/auth.config'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-	adapter: DrizzleAdapter(db),
+	...authConfig,
 	providers: [
 		Credentials({
 			name: 'Credentials',
@@ -13,10 +14,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				email: { label: 'Email', type: 'email' },
 				password: { label: 'Password', type: 'password' },
 			},
-			async authorize(credentials) {
+			async authorize(credentials): Promise<User | null> {
 				const { email, password } = credentials as { email: string; password: string }
-
-				const res = await fetch(`${getEnv('API_URL')}/login`, {
+				console.log("credentials",credentials);	
+				console.log("getEnv('API_URL')",getEnv('API_URL'));	
+				const res = await fetch(`${getEnv('API_URL')}/api/login`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -25,6 +27,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				})
 
 				const data = await res.json()
+
+				console.log("response",data);
 
 				if (res.status === 401) {
 					throw new Error(JSON.stringify(data))

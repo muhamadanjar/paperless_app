@@ -43,8 +43,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
               onClick={() => setNav(label)}
               sx={{
                 justifyContent: collapsed ? "center" : "flex-start",
-                minHeight: 44,
-                px: collapsed ? 0 : "12px",
+                px: collapsed ? 0 : 1.5,
                 borderLeft: active
                   ? `3px solid ${accent}`
                   : "3px solid transparent",
@@ -53,7 +52,6 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
             >
               <ListItemIcon
                 sx={{
-                  minWidth: collapsed ? 0 : 36,
                   color: active ? accent : "text.secondary",
                   justifyContent: "center",
                 }}
@@ -64,20 +62,9 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
                 <ListItemText
                   primary={label}
                   primaryTypographyProps={{
-                    fontSize: 13,
-                    fontWeight: active ? 600 : 400,
+                    fontSize: "0.8125rem", // 13px
+                    fontWeight: active ? 600 : 500,
                     color: active ? "text.primary" : "text.secondary",
-                  }}
-                />
-              )}
-              {!collapsed && active && (
-                <Box
-                  sx={{
-                    width: 6,
-                    height: 6,
-                    borderRadius: "50%",
-                    bgcolor: accent,
-                    flexShrink: 0,
                   }}
                 />
               )}

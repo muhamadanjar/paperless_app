@@ -16,6 +16,7 @@ import TimelineIcon from "@mui/icons-material/Timeline";
 import GroupIcon from "@mui/icons-material/Group";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 const MOCK_STATS = {
   totalQuizzes: 12,
@@ -49,6 +50,12 @@ const MOCK_RECENT = [
 ];
 
 export default function OverviewPage() {
+  const { data: session } = useSession();
+  const user = session?.user;
+  const name = user?.name;
+  const email = user?.email;
+  const image = user?.image;
+  console.log(user);
   return (
     <Box className="space-y-8">
       {/* Header + actions */}

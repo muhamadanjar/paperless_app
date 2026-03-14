@@ -12,8 +12,8 @@ export const users: UserTable[] = [
 	{
 		id: 1,
 		name: 'John Doe',
-		password: 'admin',
-		email: 'admin@materialize.com',
+		password: 'password',
+		email: 'admin@mail.com',
 		image: '/images/avatars/1.png'
 	}
 ]

@@ -1,6 +1,6 @@
 "use client";
 
-import { QuizTake } from "@/components/quiz/QuizTake";
+import { QuizTake } from "@/features/quiz/ui/quiz-take";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { Alert, Typography } from "@mui/material";

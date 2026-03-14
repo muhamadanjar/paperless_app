@@ -4,6 +4,7 @@ import Credentials from 'next-auth/providers/credentials'
 import { db } from '@/utils/db'
 import { getEnv } from './get-env'
 import { authConfig } from '@/configs/auth.config'
+import UserService from '@/db/repository/user-repository'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	...authConfig,
@@ -52,3 +53,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		maxAge: 30 * 24 * 60 * 60, // ** 30 days
 	},
 })
+
+export const authUserId = async () => {
+    const session = await auth();
+    if (!session) {
+        return -1;
+    }
+
+    const service = new UserService();
+
+    const user = await service.getByEmail(session.user.email!);
+
+    return user.id;
+}

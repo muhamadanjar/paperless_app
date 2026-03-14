@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Container, Typography } from "@mui/material";
-import { QuizForm } from "@/components/quiz/QuizForm";
+import { QuizForm } from "@/features/quiz/ui/quiz-form";
 import { QuizFormValues } from "@/types/quiz";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";

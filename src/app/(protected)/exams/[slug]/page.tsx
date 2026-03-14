@@ -3,7 +3,7 @@
 import React from "react";
 import { Box } from "@mui/material";
 import Navbar from "@/components/navigation/navbar";
-import { QuizTake } from "@/components/quiz/QuizTake";
+import { QuizTake } from "@/features/quiz/ui/quiz-take";
 
 type Props = {
   params: {

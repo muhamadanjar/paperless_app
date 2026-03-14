@@ -4,9 +4,9 @@ import { useState } from "react";
 import { 
   Box, Container, Typography, Tab, Tabs, Button, Dialog, DialogTitle, DialogContent, IconButton 
 } from "@mui/material";
-import { QuizForm } from "@/components/quiz/QuizForm";
-import { QuestionForm } from "@/components/quiz/QuestionForm";
-import { QuestionList } from "@/components/quiz/QuestionList";
+import { QuizForm } from "@/features/quiz/ui/quiz-form";
+import { QuestionForm } from "@/features/quiz/ui/question-form";
+import { QuestionList } from "@/features/quiz/ui/question-list";
 import { QuizFormValues, QuestionFormValues } from "@/types/quiz";
 import { toast } from "react-toastify";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";

@@ -3,7 +3,7 @@
 import { Typography, Button, Container, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
-import { QuizCard } from "@/components/quiz/QuizCard";
+import { QuizCard } from "@/features/quiz/ui/quiz-card";
 
 // Mock data for UI demonstration
 const MOCK_QUIZZES = [

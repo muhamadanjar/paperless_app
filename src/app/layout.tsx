@@ -7,6 +7,7 @@ import '@/assets/css/globals.css'
 import 'react-perfect-scrollbar/dist/css/styles.css'
 import { AuthProvider } from '@/context/auth-provider'
 import ProviderWrapper from '@/providers'
+import ThemeRegistry from '@/components/ui/theme-registry'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -31,7 +32,10 @@ export default async function RootLayout({
         {/* AppRouterCacheProvider diperlukan untuk MUI v7 dengan Next.js App Router */}
         <ProviderWrapper>
           <AuthProvider>
-            {children}
+            <ThemeRegistry>
+
+              {children}
+            </ThemeRegistry>
           </AuthProvider>
         </ProviderWrapper>
       </body>

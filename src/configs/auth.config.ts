@@ -1,17 +1,15 @@
 import { NextResponse } from "next/server";
 import { Routes } from "@/configs/route.const";
 import { NextAuthConfig } from "next-auth";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { db } from "@/utils/db";
 
 
 export const authConfig = {
     callbacks: {
         async authorized({ auth, request: { url, nextUrl, headers, body } }){
-            console.log("auth",auth);
-            console.log("request",url);
-            console.log("nextUrl",nextUrl);
-            console.log("headers",headers);
+            // console.log("auth",auth);
+            // console.log("request",url);
+            // console.log("nextUrl",nextUrl);
+            // console.log("headers",headers);
             const isLoggedIn = !!auth?.user;
 
             if (nextUrl.pathname.startsWith('/auth')) {

@@ -1,5 +1,5 @@
 import { CSSProperties, useId } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@mui/material';
 import { useDataGrid } from '@/components/ui/data-grid';
 import {
   DataGridTableBase,
@@ -38,7 +38,7 @@ function DataGridTableDndRowHandle({ rowId }: { rowId: string }) {
   });
 
   return (
-    <Button variant="dim" size="sm" className="size-7" {...attributes} {...listeners}>
+    <Button variant="outlined" size="small" className="size-7" {...attributes} {...listeners}>
       <GripHorizontal />
     </Button>
   );

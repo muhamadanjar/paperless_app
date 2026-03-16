@@ -1,5 +1,5 @@
 import { CSSProperties, Fragment, useId } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@mui/material';
 import { useDataGrid } from '@/components/ui/data-grid';
 import {
   DataGridTableBase,
@@ -54,9 +54,9 @@ function DataGridTableDndHeader<TData>({ header }: { header: Header<TData, unkno
     <DataGridTableHeadRowCell header={header} dndStyle={style} dndRef={setNodeRef}>
       <div className="flex items-center justify-start gap-0.5">
         <Button
-          mode="icon"
-          size="sm"
-          variant="dim"
+        //   mode="icon"
+          size="small"
+          variant="outlined"
           className="-ms-2 size-6"
           {...attributes}
           {...listeners}

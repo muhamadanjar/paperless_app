@@ -28,7 +28,13 @@ export const DashboardTemplate: React.FC<TemplateProps> = ({ children }) => {
   );
 
   return (
-    <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden', bgcolor: 'background.default' }}>
+    <Box sx={{ 
+      display: 'flex', 
+      // flexDirection: 'column',
+      height: '100vh', 
+      overflow: 'hidden', 
+      bgcolor: 'background.default' 
+    }}>
       {/* Desktop — permanent */}
       {!isMobile && (
         <Drawer

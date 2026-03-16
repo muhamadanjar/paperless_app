@@ -7,6 +7,8 @@ export default class UserService extends BaseService<typeof Table.users>{
     constructor() {
         super(new CustomORM(db), Table.users);
     }
+
+
     async getByEmail(email: string) {
         return await this.findOne(['email', email]);
     }

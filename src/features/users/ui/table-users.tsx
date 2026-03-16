@@ -34,10 +34,11 @@ import {
   DialogActions,
   Zoom,
 } from '@mui/material';
-import { Search, UserPlus, RotateCcw, Download, Filter, X } from 'lucide-react';
+import { Search, UserPlus, RotateCcw, Download, Filter, X, Trash2, Edit3, Eye } from 'lucide-react';
 import { axiosServices } from '@/libs/http';
 import { UserForm, UserFormData } from './form-user';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 interface User {
   id: string;
@@ -48,6 +49,7 @@ interface User {
 }
 
 export const UserList = () => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const [pagination, setPagination] = useState({
     pageSize: 10,
@@ -61,9 +63,11 @@ export const UserList = () => {
   const [selectedRole, setSelectedRole] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
 
-  // Dialog state
+  // Dialog states
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
   const fetchUsers = async ({
     pageIndex,
@@ -83,7 +87,7 @@ export const UserList = () => {
       page: String(pageIndex + 1),
       limit: String(pageSize),
       ...(sortField ? { sort: sortField, dir: sortDirection } : {}),
-      ...(searchQuery ? { query: searchQuery } : {}),
+      ...(searchQuery ? { search: searchQuery } : {}),
       ...(selectedRole && selectedRole !== 'all' ? { roleId: selectedRole } : {}),
       ...(selectedStatus && selectedStatus !== 'all' ? { status: selectedStatus } : {}),
     });
@@ -112,7 +116,7 @@ export const UserList = () => {
   });
 
   // Mutations
-  const createUserMutation = useMutation({
+  const createMemberMutation = useMutation({
     mutationFn: (newUser: UserFormData) => axiosServices.post('/api/users', newUser),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-users'] });
@@ -121,6 +125,31 @@ export const UserList = () => {
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || 'Failed to create user');
+    }
+  });
+
+  const updateMemberMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UserFormData }) => axiosServices.patch(`/api/users/${id}`, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-users'] });
+      toast.success('User updated successfully');
+      handleCloseDialog();
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Failed to update user');
+    }
+  });
+
+  const deleteMemberMutation = useMutation({
+    mutationFn: (id: string) => axiosServices.delete(`/api/users/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-users'] });
+      toast.success('User deleted successfully');
+      setIsDeleteDialogOpen(false);
+      setUserToDelete(null);
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Failed to delete user');
     }
   });
 
@@ -136,11 +165,20 @@ export const UserList = () => {
 
   const handleSubmitForm = (formData: UserFormData) => {
     if (editingUser) {
-        // Implement update logic if endpoint exists
-        toast.info('Update functionality would be called here');
-        handleCloseDialog();
+        updateMemberMutation.mutate({ id: editingUser.id, data: formData });
     } else {
-        createUserMutation.mutate(formData);
+        createMemberMutation.mutate(formData);
+    }
+  };
+
+  const handleDeleteUser = (user: User) => {
+    setUserToDelete(user);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (userToDelete) {
+        deleteMemberMutation.mutate(userToDelete.id);
     }
   };
 
@@ -187,24 +225,36 @@ export const UserList = () => {
       },
       {
         accessorKey: 'actions',
-        header: '',
+        header: 'Actions',
         cell: (info) => (
-          <Tooltip title="Edit User">
-            <IconButton size="small" onClick={() => handleOpenDialog(info.row.original)}>
-              <Icon name="edit-2" className="text-muted-foreground/70 size-4" />
-            </IconButton>
-          </Tooltip>
+          <Stack direction="row" spacing={0.5} justifyContent="flex-end">
+            <Tooltip title="View Profile">
+                <IconButton size="small" onClick={() => router.push(`/users/${info.row.original.id}`)}>
+                   <Eye size={16} className="text-muted-foreground/70" />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title="Edit Member">
+                <IconButton size="small" onClick={() => handleOpenDialog(info.row.original)}>
+                   <Edit3 size={16} className="text-primary/70" />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title="Remove User">
+                <IconButton size="small" onClick={() => handleDeleteUser(info.row.original)}>
+                   <Trash2 size={16} className="text-error/70" />
+                </IconButton>
+            </Tooltip>
+          </Stack>
         ),
         meta: {
           skeleton: <Skeleton className="h-4 w-full bg-gray-700" />,
         },
-        size: 40,
+        size: 120,
         enableSorting: false,
         enableHiding: false,
         enableResizing: false,
       },
     ];
-  }, []);
+  }, [router]);
 
   const table = useReactTable({
     columns,
@@ -446,9 +496,60 @@ export const UserList = () => {
             initialData={editingUser || undefined} 
             onSubmit={handleSubmitForm} 
             onCancel={handleCloseDialog}
-            isLoading={createUserMutation.isPending}
+            isLoading={createMemberMutation.isPending || updateMemberMutation.isPending}
           />
         </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        TransitionComponent={Zoom}
+        PaperProps={{
+          sx: { borderRadius: 3, p: 1 }
+        }}
+      >
+        <DialogTitle sx={{ textAlign: 'center', pt: 3 }}>
+           <Box sx={{ 
+               width: 60, 
+               height: 60, 
+               borderRadius: '50%', 
+               bgcolor: 'error.lighter', 
+               display: 'flex', 
+               alignItems: 'center', 
+               justifyContent: 'center',
+               mx: 'auto',
+               mb: 2
+           }}>
+               <Trash2 size={30} className="text-error" />
+           </Box>
+           <Typography variant="h6" sx={{ fontWeight: 800 }}>Delete Member?</Typography>
+        </DialogTitle>
+        <DialogContent sx={{ textAlign: 'center' }}>
+            <Typography variant="body2" color="text.secondary">
+               Are you sure you want to remove <strong>{userToDelete?.name}</strong>? This action cannot be undone.
+            </Typography>
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: 'center', pb: 3, px: 3, gap: 1.5 }}>
+            <Button 
+                variant="outlined" 
+                onClick={() => setIsDeleteDialogOpen(false)}
+                sx={{ borderRadius: 2, px: 3, flex: 1, textTransform: 'none' }}
+            >
+                Keep Member
+            </Button>
+            <Button 
+                variant="contained" 
+                color="error"
+                disableElevation
+                onClick={confirmDelete}
+                disabled={deleteMemberMutation.isPending}
+                sx={{ borderRadius: 2, px: 3, flex: 1, textTransform: 'none', fontWeight: 700 }}
+            >
+                {deleteMemberMutation.isPending ? 'Deleting...' : 'Delete Permanently'}
+            </Button>
+        </DialogActions>
       </Dialog>
     </Paper>
   );

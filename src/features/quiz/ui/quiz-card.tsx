@@ -3,7 +3,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Link from "next/link";
-
+import { motion } from "motion/react";
 interface QuizCardProps {
   quiz: {
     id: string;
@@ -20,7 +20,14 @@ export function QuizCard({ quiz, onDelete }: QuizCardProps) {
   const dateStr = quiz.createdAt ? new Date(quiz.createdAt).toLocaleDateString() : "Unknown date";
   
   return (
-    <Card className="h-full flex flex-col transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/10 hover:-translate-y-1 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-xl overflow-hidden group">
+
+    <Card component={motion.div}
+     
+    initial={{ opacity: 0, scale: 0.98, }}
+    transition={{ duration: 0.2, ease: "easeOut" }}
+    animate={{ opacity: 1, scale: 1,}}
+    
+    className="h-full flex flex-col transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/10 hover:-translate-y-1 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-xl overflow-hidden group">
       <div className="h-2 w-full bg-gradient-to-r from-indigo-500 to-purple-500" />
       
       <CardContent className="flex flex-col flex-grow p-6">

@@ -6,7 +6,7 @@ export default NextAuth(authConfig).auth;
 // See "Matching Paths" below to learn more
 export const config = {
 	matcher: [
-		'/((?!api/login|api/auth/.*|assets|fonts|media|_next/static|_next/image|.*\\.png$).*)',
+		'/((?!api/login|api/*|api/auth/.*|assets|fonts|media|_next/static|_next/image|.*\\.png$).*)',
 	],
 	runtime: 'nodejs',
 	

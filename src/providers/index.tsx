@@ -1,6 +1,7 @@
 "use client"
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { SessionProvider } from "next-auth/react";
 import { useState } from "react";
 
@@ -12,6 +13,7 @@ export default function ProviderWrapper({ children }: { children: React.ReactNod
                 <SessionProvider>
                     {children}
                 </SessionProvider>
+                <ReactQueryDevtools initialIsOpen={false} />
             </QueryClientProvider>
         </AppRouterCacheProvider>
     );

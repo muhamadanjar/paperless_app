@@ -26,7 +26,7 @@ export type DataGridApiFetchParams = {
 export type DataGridApiResponse<T> = {
   data: T[];
   empty: boolean;
-  pagination: {
+  meta: {
     total: number;
     page: number;
   };

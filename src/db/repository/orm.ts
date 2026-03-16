@@ -364,6 +364,7 @@ class Repository<T extends Table> implements BaseRepository<T> {
 
   async create(data: any): Promise<any> {
     try {
+      console.log("request", data);
       const result = await this.db.insert(this.table).values(data).returning();
       return result[0];
     } catch (error) {

@@ -1,5 +1,5 @@
 import { CSSProperties, Fragment, useId } from 'react';
-import { Button } from '@mui/material';
+import { IconButton, Tooltip, Box } from '@mui/material';
 import { useDataGrid } from '@/components/ui/data-grid';
 import {
   DataGridTableBase,
@@ -41,34 +41,43 @@ function DataGridTableDndHeader<TData>({ header }: { header: Header<TData, unkno
   });
 
   const style: CSSProperties = {
-    opacity: isDragging ? 0.8 : 1,
+    opacity: isDragging ? 0.6 : 1,
     position: 'relative',
     transform: CSS.Translate.toString(transform),
     transition,
     whiteSpace: 'nowrap',
     width: header.column.getSize(),
-    zIndex: isDragging ? 1 : 0,
+    zIndex: isDragging ? 10 : 1,
   };
 
   return (
     <DataGridTableHeadRowCell header={header} dndStyle={style} dndRef={setNodeRef}>
-      <div className="flex items-center justify-start gap-0.5">
-        <Button
-        //   mode="icon"
-          size="small"
-          variant="outlined"
-          className="-ms-2 size-6"
-          {...attributes}
-          {...listeners}
-          aria-label="Drag to reorder"
-        >
-          <GripVertical className="opacity-50" aria-hidden="true" />
-        </Button>
-        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+        <Tooltip title="Drag to reorder column" arrow>
+          <IconButton
+            size="small"
+            sx={{
+              ml: -1.5,
+              width: 24,
+              height: 24,
+              cursor: isDragging ? 'grabbing' : 'grab',
+              color: 'text.disabled',
+              '&:hover': { color: 'primary.main', bgcolor: 'primary.lighter' },
+            }}
+            {...attributes}
+            {...listeners}
+            aria-label="Drag to reorder"
+          >
+            <GripVertical size={14} />
+          </IconButton>
+        </Tooltip>
+        <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+          {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+        </Box>
         {props.tableLayout?.columnsResizable && column.getCanResize() && (
           <DataGridTableHeadRowCellResize header={header} />
         )}
-      </div>
+      </Box>
     </DataGridTableHeadRowCell>
   );
 }
@@ -79,12 +88,12 @@ function DataGridTableDndCell<TData>({ cell }: { cell: Cell<TData, unknown> }) {
   });
 
   const style: CSSProperties = {
-    opacity: isDragging ? 0.8 : 1,
+    opacity: isDragging ? 0.6 : 1,
     position: 'relative',
     transform: CSS.Translate.toString(transform),
     transition,
     width: cell.column.getSize(),
-    zIndex: isDragging ? 1 : 0,
+    zIndex: isDragging ? 10 : 1,
   };
 
   return (

@@ -1,9 +1,18 @@
 import { ReactNode } from 'react';
 import { useDataGrid } from '@/components/ui/data-grid';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/libs/utils';
-import { Button, MenuItem, Select } from '@mui/material';
+import {
+  Button,
+  MenuItem,
+  Select,
+  Box,
+  Typography,
+  Stack,
+  IconButton,
+  Tooltip,
+} from '@mui/material';
 
 interface DataGridPaginationProps {
   sizes?: number[];
@@ -23,7 +32,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
 
   const defaultProps: Partial<DataGridPaginationProps> = {
     sizes: [5, 10, 25, 50, 100],
-    sizesLabel: 'Show',
+    sizesLabel: 'Rows per page',
     sizesDescription: 'per page',
     sizesSkeleton: <Skeleton className="h-8 w-44" />,
     moreLimit: 5,
@@ -34,15 +43,12 @@ function DataGridPagination(props: DataGridPaginationProps) {
 
   const mergedProps: DataGridPaginationProps = { ...defaultProps, ...props };
 
-  const btnBaseClasses = 'size-7 p-0 text-sm';
-  const btnArrowClasses = btnBaseClasses + ' rtl:transform rtl:rotate-180';
   const pageIndex = table.getState().pagination.pageIndex;
   const pageSize = table.getState().pagination.pageSize;
-  const from = pageIndex * pageSize + 1;
+  const from = recordCount === 0 ? 0 : pageIndex * pageSize + 1;
   const to = Math.min((pageIndex + 1) * pageSize, recordCount);
   const pageCount = table.getPageCount();
 
-  // Replace placeholders in paginationInfo
   const paginationInfo = mergedProps?.info
     ? mergedProps.info
         .replace('{from}', from.toString())
@@ -50,26 +56,34 @@ function DataGridPagination(props: DataGridPaginationProps) {
         .replace('{count}', recordCount.toString())
     : `${from} - ${to} of ${recordCount}`;
 
-  // Pagination limit logic
   const paginationMoreLimit = mergedProps?.moreLimit || 5;
 
-  // Determine the start and end of the pagination group
   const currentGroupStart = Math.floor(pageIndex / paginationMoreLimit) * paginationMoreLimit;
   const currentGroupEnd = Math.min(currentGroupStart + paginationMoreLimit, pageCount);
 
-  // Render page buttons based on the current group
   const renderPageButtons = () => {
     const buttons = [];
     for (let i = currentGroupStart; i < currentGroupEnd; i++) {
+      const isActive = pageIndex === i;
       buttons.push(
         <Button
           key={i}
           size="small"
-        //   mode="icon"
-          variant="text"
-          className={cn(btnBaseClasses, 'text-muted-foreground', {
-            'bg-accent text-accent-foreground': pageIndex === i,
-          })}
+          variant={isActive ? 'contained' : 'text'}
+          disableElevation
+          sx={{
+            minWidth: 32,
+            height: 32,
+            p: 0,
+            borderRadius: 1.5,
+            fontSize: '0.8125rem',
+            fontWeight: isActive ? 600 : 400,
+            color: isActive ? 'primary.contrastText' : 'text.secondary',
+            '&:hover': {
+              bgcolor: isActive ? 'primary.main' : 'action.hover',
+              color: isActive ? 'primary.contrastText' : 'text.primary',
+            },
+          }}
           onClick={() => {
             if (pageIndex !== i) {
               table.setPageIndex(i);
@@ -83,122 +97,132 @@ function DataGridPagination(props: DataGridPaginationProps) {
     return buttons;
   };
 
-  // Render a "previous" ellipsis button if there are previous pages to show
   const renderEllipsisPrevButton = () => {
     if (currentGroupStart > 0) {
       return (
-        <Button
-        //   size="sm"
-        //   mode="icon"
-          className={btnBaseClasses}
-        //   variant="ghost"
+        <IconButton
+          size="small"
           onClick={() => table.setPageIndex(currentGroupStart - 1)}
+          sx={{ width: 32, height: 32 }}
         >
-          ...
-        </Button>
+          <MoreHorizontal size={14} />
+        </IconButton>
       );
     }
     return null;
   };
 
-  // Render a "next" ellipsis button if there are more pages to show after the current group
   const renderEllipsisNextButton = () => {
     if (currentGroupEnd < pageCount) {
       return (
-        <Button
-          className={btnBaseClasses}
-        //   variant="ghost"
-        //   size="sm"
-        //   mode="icon"
+        <IconButton
+          size="small"
           onClick={() => table.setPageIndex(currentGroupEnd)}
+          sx={{ width: 32, height: 32 }}
         >
-          ...
-        </Button>
+          <MoreHorizontal size={14} />
+        </IconButton>
       );
     }
     return null;
   };
 
   return (
-    <div
-      data-slot="data-grid-pagination"
-      className={cn(
-        'flex flex-wrap flex-col sm:flex-row justify-between items-center gap-2.5 py-2.5 sm:py-0 grow',
-        mergedProps?.className,
-      )}
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column', sm: 'row' },
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: 2,
+        py: 2,
+        px: 2,
+        borderTop: '1px solid',
+        borderColor: 'divider',
+        bgcolor: 'background.paper',
+      }}
+      className={mergedProps?.className}
     >
-      <div className="flex flex-wrap items-center space-x-2.5 pb-2.5 sm:pb-0 order-2 sm:order-1">
+      <Stack direction="row" alignItems="center" spacing={1.5}>
         {isLoading ? (
           mergedProps?.sizesSkeleton
         ) : (
           <>
-            <div className="text-sm text-muted-foreground">Rows per page</div>
+            <Typography variant="body2" color="text.secondary">
+              {mergedProps.sizesLabel}
+            </Typography>
             <Select
+              size="small"
               value={`${pageSize}`}
-            //   indicatorPosition="right"
-              onChange={(value) => {
-                const newPageSize = Number(value);
-                table.setPageSize(newPageSize);
+              onChange={(e) => table.setPageSize(Number(e.target.value))}
+              sx={{
+                height: 32,
+                fontSize: '0.8125rem',
+                borderRadius: 1.5,
+                bgcolor: 'background.default',
+                '& .MuiSelect-select': { py: 0.5, px: 1.5 },
               }}
             >
-              {/* <SelectTrigger className="w-fit" size="sm">
-                <SelectValue placeholder={`${pageSize}`} />
-              </SelectTrigger> */}
-              {/* <SelectContent side="top" className="min-w-[50px]"> */}
-                {mergedProps?.sizes?.map((size: number) => (
-                  <MenuItem key={size} value={`${size}`}>
-                    {size}
-                  </MenuItem>
-                ))}
-              {/* </SelectContent> */}
+              {mergedProps?.sizes?.map((size: number) => (
+                <MenuItem key={size} value={`${size}`} sx={{ fontSize: '0.8125rem' }}>
+                  {size}
+                </MenuItem>
+              ))}
             </Select>
           </>
         )}
-      </div>
-      <div className="flex flex-col sm:flex-row justify-center sm:justify-end items-center gap-2.5 pt-2.5 sm:pt-0 order-1 sm:order-2">
+      </Stack>
+
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        alignItems="center"
+        spacing={{ xs: 1.5, sm: 3 }}
+      >
         {isLoading ? (
           mergedProps?.infoSkeleton
         ) : (
           <>
-            <div className="text-sm text-muted-foreground text-nowrap order-2 sm:order-1">{paginationInfo}</div>
+            <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
+              {paginationInfo}
+            </Typography>
+
             {pageCount > 1 && (
-              <div className="flex items-center space-x-1 order-1 sm:order-2">
-                <Button
-                  size="small"
-                //   mode="icon"
-                //   variant="ghost"
-                  className={btnArrowClasses}
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  <span className="sr-only">Go to previous page</span>
-                  <ChevronLeftIcon className="size-4" />
-                </Button>
+              <Stack direction="row" alignItems="center" spacing={0.5}>
+                <Tooltip title="Previous page">
+                  <span>
+                    <IconButton
+                      size="small"
+                      onClick={() => table.previousPage()}
+                      disabled={!table.getCanPreviousPage()}
+                      sx={{ width: 32, height: 32 }}
+                    >
+                      <ChevronLeftIcon size={18} />
+                    </IconButton>
+                  </span>
+                </Tooltip>
 
                 {renderEllipsisPrevButton()}
-
                 {renderPageButtons()}
-
                 {renderEllipsisNextButton()}
 
-                <Button
-                size='small'
-                //   size="sm"
-                //   mode="icon"
-                //   variant="ghost"
-                  className={btnArrowClasses}
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                >
-                  <span className="sr-only">Go to next page</span>
-                  <ChevronRightIcon className="size-4" />
-                </Button>
-              </div>
+                <Tooltip title="Next page">
+                  <span>
+                    <IconButton
+                      size="small"
+                      onClick={() => table.nextPage()}
+                      disabled={!table.getCanNextPage()}
+                      sx={{ width: 32, height: 32 }}
+                    >
+                      <ChevronRightIcon size={18} />
+                    </IconButton>
+                  </span>
+                </Tooltip>
+              </Stack>
             )}
           </>
         )}
-      </div>
-    </div>
+      </Stack>
+    </Box>
   );
 }
 

@@ -1,5 +1,5 @@
 import { CSSProperties, useId } from 'react';
-import { Button } from '@mui/material';
+import { IconButton, Tooltip, Box } from '@mui/material';
 import { useDataGrid } from '@/components/ui/data-grid';
 import {
   DataGridTableBase,
@@ -33,14 +33,27 @@ import { Cell, flexRender, HeaderGroup, Row } from '@tanstack/react-table';
 import { GripHorizontal } from 'lucide-react';
 
 function DataGridTableDndRowHandle({ rowId }: { rowId: string }) {
-  const { attributes, listeners } = useSortable({
+  const { attributes, listeners, isDragging } = useSortable({
     id: rowId,
   });
 
   return (
-    <Button variant="outlined" size="small" className="size-7" {...attributes} {...listeners}>
-      <GripHorizontal />
-    </Button>
+    <Tooltip title="Drag to reorder row" arrow>
+      <IconButton
+        size="small"
+        sx={{
+          width: 28,
+          height: 28,
+          cursor: isDragging ? 'grabbing' : 'grab',
+          color: 'text.disabled',
+          '&:hover': { color: 'primary.main', bgcolor: 'primary.lighter' },
+        }}
+        {...attributes}
+        {...listeners}
+      >
+        <GripHorizontal size={16} />
+      </IconButton>
+    </Tooltip>
   );
 }
 
@@ -50,11 +63,13 @@ function DataGridTableDndRow<TData>({ row }: { row: Row<TData> }) {
   });
 
   const style: CSSProperties = {
-    transform: CSS.Transform.toString(transform), //let dnd-kit do its thing
+    transform: CSS.Transform.toString(transform),
     transition: transition,
-    opacity: isDragging ? 0.8 : 1,
-    zIndex: isDragging ? 1 : 0,
+    opacity: isDragging ? 0.7 : 1,
+    zIndex: isDragging ? 20 : 1,
     position: 'relative',
+    backgroundColor: isDragging ? 'var(--mui-palette-action-hover)' : undefined,
+    boxShadow: isDragging ? '0 8px 16px -4px rgba(0,0,0,0.1)' : undefined,
   };
   return (
     <DataGridTableBodyRow row={row} dndRef={setNodeRef} dndStyle={style} key={row.id}>
